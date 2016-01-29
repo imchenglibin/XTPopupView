@@ -14,7 +14,7 @@ public enum PopupViewCustomViewPosition {
 }
 
 public class PopupView: UIView {
-    
+    private var _tapGesture: UITapGestureRecognizer?
     private var _customViewPositin: PopupViewCustomViewPosition = .Bottom
     private var _customView: UIView?
     private var _size: CGSize = CGSize(width: 0, height: 0)
@@ -28,6 +28,13 @@ public class PopupView: UIView {
             make.edges.equalTo(attachView)
         }
         
+        if let _ = _tapGesture {
+            attachView .addGestureRecognizer(_tapGesture!)
+        } else {
+            _tapGesture = UITapGestureRecognizer(target: self, action: Selector("tap:"))
+            attachView.addGestureRecognizer(_tapGesture!)
+        }
+        
         if _customViewPositin == .Bottom {
             Window.sharedWindow.hidden = false
             self._customView!.layer.position = CGPoint(x: attachView.bounds.size.width / 2, y: attachView.bounds.size.height + self._size.height / 2)
@@ -39,6 +46,10 @@ public class PopupView: UIView {
         }
     }
     
+    func tap(tapGesture: UITapGestureRecognizer) {
+         hide()
+    }
+    
     public func hide() {
         let attachView: UIView = Window.sharedWindow.mainView()
         
@@ -47,6 +58,7 @@ public class PopupView: UIView {
                 self._customView!.layer.position = CGPoint(x: attachView.bounds.size.width / 2, y: attachView.bounds.size.height + self._size.height / 2)
                 }, completion: { (Bool) -> Void in
                     Window.sharedWindow.hidden = true
+                    attachView.removeGestureRecognizer(self._tapGesture!)
                     self.removeFromSuperview()
             })
         } else {

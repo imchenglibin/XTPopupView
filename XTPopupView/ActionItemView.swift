@@ -30,6 +30,7 @@ class ActionItemView: UIView {
         case .HighLight:
             button.setTitleColor(UIColor.redColor(), forState: UIControlState.Normal)
         case .Disabled:
+            button.userInteractionEnabled = false
             button.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Normal)
         }
         

@@ -74,12 +74,12 @@ public class AlertView: PopupView {
         if let textFieldHandler = _textFieldHandler {
             let textField = UITextField()
             inputTextField = textField
-            textField.becomeFirstResponder()
             textField.font = UIFont.systemFontOfSize(14)
             textField.borderStyle = UITextBorderStyle.RoundedRect
             alertView.addSubview(textField)
             textField.placeholder = _message
             textFieldHandler(textField: textField)
+            textField.becomeFirstResponder()
             textField.snp_makeConstraints { (make) -> Void in
                 make.top.equalTo(preItemView!.snp_bottom)
                 make.left.equalTo(alertView).offset(8)

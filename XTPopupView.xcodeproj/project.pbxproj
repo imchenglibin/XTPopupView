@@ -11,6 +11,9 @@
 		8469EB4D1C5AF4C2007FA94E /* Window.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8469EB4C1C5AF4C2007FA94E /* Window.swift */; };
 		847986301C5B0352006FCCE3 /* ActionItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8479862F1C5B0352006FCCE3 /* ActionItemView.swift */; };
 		848984761C5B11DC0021D475 /* ActionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848984751C5B11DC0021D475 /* ActionItem.swift */; };
+		8496FFEE1C5F581400021FFE /* PopupViewButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8496FFED1C5F581400021FFE /* PopupViewButton.swift */; };
+		8496FFF01C5F582B00021FFE /* PopupViewLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8496FFEF1C5F582B00021FFE /* PopupViewLabel.swift */; };
+		8496FFF21C5F584B00021FFE /* PopupViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8496FFF11C5F584B00021FFE /* PopupViewItem.swift */; };
 		84DD8E7B1C5AF69A001672CF /* PopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DD8E7A1C5AF69A001672CF /* PopupView.swift */; };
 		84DD8E7D1C5AF8CC001672CF /* ActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DD8E7C1C5AF8CC001672CF /* ActionSheet.swift */; };
 		84FD2AE91C5AF20B005DD628 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FD2AE11C5AF20B005DD628 /* AppDelegate.swift */; };
@@ -28,6 +31,9 @@
 		8469EB4C1C5AF4C2007FA94E /* Window.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Window.swift; sourceTree = "<group>"; };
 		8479862F1C5B0352006FCCE3 /* ActionItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionItemView.swift; sourceTree = "<group>"; };
 		848984751C5B11DC0021D475 /* ActionItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionItem.swift; sourceTree = "<group>"; };
+		8496FFED1C5F581400021FFE /* PopupViewButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopupViewButton.swift; sourceTree = "<group>"; };
+		8496FFEF1C5F582B00021FFE /* PopupViewLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopupViewLabel.swift; sourceTree = "<group>"; };
+		8496FFF11C5F584B00021FFE /* PopupViewItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopupViewItem.swift; sourceTree = "<group>"; };
 		84DD8E7A1C5AF69A001672CF /* PopupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopupView.swift; sourceTree = "<group>"; };
 		84DD8E7C1C5AF8CC001672CF /* ActionSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionSheet.swift; sourceTree = "<group>"; };
 		84FD2ACA1C5AF1DE005DD628 /* XTPopupView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XTPopupView.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -96,6 +102,9 @@
 				8479862F1C5B0352006FCCE3 /* ActionItemView.swift */,
 				848984751C5B11DC0021D475 /* ActionItem.swift */,
 				844AECF91C5EE5C600A6D447 /* AlertView.swift */,
+				8496FFED1C5F581400021FFE /* PopupViewButton.swift */,
+				8496FFEF1C5F582B00021FFE /* PopupViewLabel.swift */,
+				8496FFF11C5F584B00021FFE /* PopupViewItem.swift */,
 			);
 			path = XTPopupView;
 			sourceTree = "<group>";
@@ -234,7 +243,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8496FFF21C5F584B00021FFE /* PopupViewItem.swift in Sources */,
+				8496FFF01C5F582B00021FFE /* PopupViewLabel.swift in Sources */,
 				847986301C5B0352006FCCE3 /* ActionItemView.swift in Sources */,
+				8496FFEE1C5F581400021FFE /* PopupViewButton.swift in Sources */,
 				848984761C5B11DC0021D475 /* ActionItem.swift in Sources */,
 				84FD2AEE1C5AF20B005DD628 /* MainViewController.swift in Sources */,
 				84DD8E7B1C5AF69A001672CF /* PopupView.swift in Sources */,

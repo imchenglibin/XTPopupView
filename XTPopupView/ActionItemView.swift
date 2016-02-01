@@ -25,7 +25,7 @@ class ActionItemView: UIView {
         
         let button = UIButton(type: UIButtonType.System)
         switch(type) {
-        case .Normal:
+        case .Normal, .Cancel:
             button.setTitleColor(UIColor.darkGrayColor(), forState: UIControlState.Normal)
         case .HighLight:
             button.setTitleColor(UIColor.redColor(), forState: UIControlState.Normal)

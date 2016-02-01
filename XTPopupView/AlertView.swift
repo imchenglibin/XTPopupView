@@ -13,9 +13,12 @@ public class AlertView: PopupView {
     private var _title: String
     private var _message: String
     private var _items: [ActionItem]
+    private var _textFieldHandler: ((textField: UITextField)->Void)?
     private var _block:(Int)->Void
     private static let DefaultItemHeight: CGFloat = 40
     private var _messageLabel: UILabel?
+
+    public var inputTextField: UITextField?
     
     public var messageAlignment: NSTextAlignment? {
         get {
@@ -31,6 +34,16 @@ public class AlertView: PopupView {
         _message = message
         _items = items
         _block = action
+        super.init(frame: CGRectZero)
+        super.setCustomView(createAlertView(), position: .Center)
+    }
+    
+    public init(title: String, placeholder: String, inputTextFieldHandler: (textField: UITextField )->Void, items: [ActionItem], action: (Int)->Void) {
+        _title = title
+        _items = items
+        _block = action
+        _message = placeholder
+        _textFieldHandler = inputTextFieldHandler
         super.init(frame: CGRectZero)
         super.setCustomView(createAlertView(), position: .Center)
     }
@@ -58,24 +71,44 @@ public class AlertView: PopupView {
         height += AlertView.DefaultItemHeight
         preItemView = titleLabel
         
-        let messageLabel = UILabel()
-        _messageLabel = messageLabel
-        messageLabel.text = _message
-        messageLabel.font = UIFont.systemFontOfSize(12)
-        messageLabel.textAlignment = NSTextAlignment.Center
-        messageLabel.numberOfLines = 0
-        alertView.addSubview(messageLabel)
-        let fitSize = messageLabel.sizeThatFits(CGSize(width: minSize - 16, height: 0))
-
-        messageLabel.snp_makeConstraints { (make) -> Void in
-            make.top.equalTo(preItemView!.snp_bottom)
-            make.left.equalTo(alertView).offset(8)
-            make.right.equalTo(alertView).offset(-8)
-            make.height.equalTo(fitSize.height)
+        if let textFieldHandler = _textFieldHandler {
+            let textField = UITextField()
+            inputTextField = textField
+            textField.becomeFirstResponder()
+            textField.font = UIFont.systemFontOfSize(14)
+            textField.borderStyle = UITextBorderStyle.RoundedRect
+            alertView.addSubview(textField)
+            textField.placeholder = _message
+            textFieldHandler(textField: textField)
+            textField.snp_makeConstraints { (make) -> Void in
+                make.top.equalTo(preItemView!.snp_bottom)
+                make.left.equalTo(alertView).offset(8)
+                make.right.equalTo(alertView).offset(-8)
+                make.height.equalTo(AlertView.DefaultItemHeight)
+            }
+            preItemView = textField
+            height += AlertView.DefaultItemHeight
+        } else {
+            let messageLabel = UILabel()
+            _messageLabel = messageLabel
+            messageLabel.text = _message
+            messageLabel.textColor = UIColor.darkGrayColor()
+            messageLabel.font = UIFont.systemFontOfSize(12)
+            messageLabel.textAlignment = NSTextAlignment.Center
+            messageLabel.numberOfLines = 0
+            alertView.addSubview(messageLabel)
+            let fitSize = messageLabel.sizeThatFits(CGSize(width: minSize - 16, height: 0))
+            
+            messageLabel.snp_makeConstraints { (make) -> Void in
+                make.top.equalTo(preItemView!.snp_bottom)
+                make.left.equalTo(alertView).offset(8)
+                make.right.equalTo(alertView).offset(-8)
+                make.height.equalTo(fitSize.height)
+            }
+            
+            preItemView = messageLabel
+            height += fitSize.height
         }
-        
-        preItemView = messageLabel
-        height += fitSize.height
         
         let underline = UIView()
         underline.backgroundColor = UIColor.groupTableViewBackgroundColor()
@@ -87,7 +120,7 @@ public class AlertView: PopupView {
             make.height.equalTo(1)
         }
         
-        preItemView = messageLabel
+        preItemView = underline
         height += 5
         
         if _items.count == 2 {
@@ -98,16 +131,27 @@ public class AlertView: PopupView {
             alertView.addSubview(itemView0)
             alertView.addSubview(itemView1)
             
+            let separateLine = UIView()
+            separateLine.backgroundColor = UIColor.groupTableViewBackgroundColor()
+            alertView.addSubview(separateLine)
+            
             itemView0.snp_makeConstraints(closure: { (make) -> Void in
                 make.left.equalTo(alertView)
-                make.right.equalTo(itemView1.snp_left)
+                make.right.equalTo(separateLine.snp_left)
                 make.width.equalTo(itemView1)
                 make.bottom.equalTo(alertView)
                 make.height.equalTo(AlertView.DefaultItemHeight)
             })
             
+            separateLine.snp_makeConstraints(closure: { (make) -> Void in
+                make.centerY.equalTo(itemView0.snp_centerY)
+                make.bottom.equalTo(alertView)
+                make.top.equalTo(itemView0.snp_top)
+                make.width.equalTo(1)
+            })
+            
             itemView1.snp_makeConstraints(closure: { (make) -> Void in
-                make.left.equalTo(itemView0.snp_right)
+                make.left.equalTo(separateLine.snp_right)
                 make.right.equalTo(alertView)
                 make.bottom.equalTo(alertView)
                 make.height.equalTo(AlertView.DefaultItemHeight)
@@ -157,7 +201,20 @@ public class AlertView: PopupView {
         if sender.tag < _items.count {
             _block(sender.tag)
         }
+        
+        inputTextField?.resignFirstResponder()
+        
         self.hide()
+    }
+    
+    public override func show() {
+        super.show()
+        if let _ = inputTextField {
+            self.customView?.snp_updateConstraints(closure: { (make) -> Void in
+                let newPoint = CGPoint(x: self.center.x, y: self.center.y - 216 / 2)
+                make.center.equalTo(self).offset(newPoint)
+            })
+        }
     }
 
     required public init?(coder aDecoder: NSCoder) {

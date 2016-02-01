@@ -16,7 +16,7 @@ public enum PopupViewCustomViewPosition {
 public class PopupView: UIView {
     private var _tapGesture: UITapGestureRecognizer?
     private var _customViewPositin: PopupViewCustomViewPosition = .Bottom
-    private var _customView: UIView?
+    public var customView: UIView?
     private var _size: CGSize = CGSize(width: 0, height: 0)
     
     public func show() {
@@ -37,21 +37,29 @@ public class PopupView: UIView {
         
         if _customViewPositin == .Bottom {
             Window.sharedWindow.hidden = false
-            self._customView!.layer.position = CGPoint(x: attachView.bounds.size.width / 2, y: attachView.bounds.size.height + self._size.height / 2)
+            self.customView!.layer.position = CGPoint(x: attachView.bounds.size.width / 2, y: attachView.bounds.size.height + self._size.height / 2)
             UIView.animateWithDuration(0.15, animations: { () -> Void in
-                 self._customView!.layer.position = CGPoint(x: attachView.bounds.size.width / 2, y: attachView.bounds.size.height - self._size.height / 2)
+                 self.customView!.layer.position = CGPoint(x: attachView.bounds.size.width / 2, y: attachView.bounds.size.height - self._size.height / 2)
             })
         } else {
             Window.sharedWindow.hidden = false
-            _customView?.alpha = 0
+            customView?.alpha = 0
             UIView.animateWithDuration(0.15, animations: { () -> Void in
-                self._customView?.alpha = 1.0
+                self.customView?.alpha = 1.0
             })
         }
     }
     
     func tap(tapGesture: UITapGestureRecognizer) {
-         hide()
+        if self is AlertView {
+            if let inputTextField = (self as! AlertView).inputTextField {
+                inputTextField.resignFirstResponder()
+            } else {
+                hide()
+            }
+        } else {
+            hide()
+        }
     }
     
     public func hide() {
@@ -59,7 +67,7 @@ public class PopupView: UIView {
         
         if _customViewPositin == .Bottom {
             UIView.animateWithDuration(0.15, animations: { () -> Void in
-                self._customView!.layer.position = CGPoint(x: attachView.bounds.size.width / 2, y: attachView.bounds.size.height + self._size.height / 2)
+                self.customView!.layer.position = CGPoint(x: attachView.bounds.size.width / 2, y: attachView.bounds.size.height + self._size.height / 2)
                 }, completion: { (Bool) -> Void in
                     Window.sharedWindow.hidden = true
                     attachView.removeGestureRecognizer(self._tapGesture!)
@@ -67,7 +75,7 @@ public class PopupView: UIView {
             })
         } else {
             UIView.animateWithDuration(0.15, animations: { () -> Void in
-                self._customView?.alpha = 0
+                self.customView?.alpha = 0
                 }, completion: { (Bool) -> Void in
                     Window.sharedWindow.hidden = true
                     attachView.removeGestureRecognizer(self._tapGesture!)
@@ -77,7 +85,7 @@ public class PopupView: UIView {
     }
     
     public func setCustomView(customView: UIView, position: PopupViewCustomViewPosition) {
-        _customView = customView
+        self.customView = customView
         _customViewPositin = position
         _size = CGSize(width: customView.frame.width, height: customView.frame.size.height)
         addSubview(customView)

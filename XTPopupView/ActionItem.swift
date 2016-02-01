@@ -9,7 +9,7 @@
 import Foundation
 
 public enum ActionItemType {
-    case Normal, HighLight, Disabled
+    case Normal, HighLight, Disabled, Cancel
 }
 
 public struct ActionItem {

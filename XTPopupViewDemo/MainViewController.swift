@@ -38,12 +38,12 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2;
+        return 3;
     }
     
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let items = ["Action Sheet", "Alert View"]
+        let items = ["Action Sheet", "Alert View", "Alert View Input"]
         let cell = tableView.dequeueReusableCellWithIdentifier("cell")
         cell?.textLabel?.text = items[indexPath.row]
         cell?.selectionStyle = UITableViewCellSelectionStyle.None
@@ -62,6 +62,13 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             })
             
             alert.messageAlignment = NSTextAlignment.Left
+            alert.show()
+        } else if indexPath.row == 2 {
+            let alert = AlertView(title: "这是一个输入框", placeholder: "消息消息消息消息消息消息消息消息消息消息消息消息消息消息消息消息消息消息", inputTextFieldHandler: { (textField) -> Void in
+                
+                }, items: [ActionItem(title: "确定", type: .Normal), ActionItem(title: "取消", type: .HighLight)], action: { (Int index) -> Void in
+                    print(index)
+            })
             alert.show()
         }
     }

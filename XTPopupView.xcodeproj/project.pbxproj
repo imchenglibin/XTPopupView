@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		844AECFA1C5EE5C600A6D447 /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844AECF91C5EE5C600A6D447 /* AlertView.swift */; };
 		8469EB4D1C5AF4C2007FA94E /* Window.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8469EB4C1C5AF4C2007FA94E /* Window.swift */; };
 		847986301C5B0352006FCCE3 /* ActionItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8479862F1C5B0352006FCCE3 /* ActionItemView.swift */; };
 		848984761C5B11DC0021D475 /* ActionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848984751C5B11DC0021D475 /* ActionItem.swift */; };
@@ -23,6 +24,7 @@
 /* Begin PBXFileReference section */
 		77108B70E37DD78AE92F9E09 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		81D47E5A97DA1CE52CDB27EE /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		844AECF91C5EE5C600A6D447 /* AlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
 		8469EB4C1C5AF4C2007FA94E /* Window.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Window.swift; sourceTree = "<group>"; };
 		8479862F1C5B0352006FCCE3 /* ActionItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionItemView.swift; sourceTree = "<group>"; };
 		848984751C5B11DC0021D475 /* ActionItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionItem.swift; sourceTree = "<group>"; };
@@ -93,6 +95,7 @@
 				84DD8E7C1C5AF8CC001672CF /* ActionSheet.swift */,
 				8479862F1C5B0352006FCCE3 /* ActionItemView.swift */,
 				848984751C5B11DC0021D475 /* ActionItem.swift */,
+				844AECF91C5EE5C600A6D447 /* AlertView.swift */,
 			);
 			path = XTPopupView;
 			sourceTree = "<group>";
@@ -236,6 +239,7 @@
 				84FD2AEE1C5AF20B005DD628 /* MainViewController.swift in Sources */,
 				84DD8E7B1C5AF69A001672CF /* PopupView.swift in Sources */,
 				84FD2AE91C5AF20B005DD628 /* AppDelegate.swift in Sources */,
+				844AECFA1C5EE5C600A6D447 /* AlertView.swift in Sources */,
 				84DD8E7D1C5AF8CC001672CF /* ActionSheet.swift in Sources */,
 				8469EB4D1C5AF4C2007FA94E /* Window.swift in Sources */,
 			);

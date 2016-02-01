@@ -2,7 +2,7 @@
 //  ActionItemView.swift
 //  XTPopupView
 //
-//  Created by admin on 16/1/29.
+//  Created by imchenlibin on 16/1/29.
 //  Copyright © 2016年 xt. All rights reserved.
 //
 

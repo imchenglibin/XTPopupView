@@ -2,7 +2,7 @@
 //  PopupView.swift
 //  XTPopupView
 //
-//  Created by admin on 16/1/29.
+//  Created by imchenlibin on 16/1/29.
 //  Copyright © 2016年 xt. All rights reserved.
 //
 
@@ -42,7 +42,11 @@ public class PopupView: UIView {
                  self._customView!.layer.position = CGPoint(x: attachView.bounds.size.width / 2, y: attachView.bounds.size.height - self._size.height / 2)
             })
         } else {
-            
+            Window.sharedWindow.hidden = false
+            _customView?.alpha = 0
+            UIView.animateWithDuration(0.15, animations: { () -> Void in
+                self._customView?.alpha = 1.0
+            })
         }
     }
     
@@ -62,7 +66,13 @@ public class PopupView: UIView {
                     self.removeFromSuperview()
             })
         } else {
-            
+            UIView.animateWithDuration(0.15, animations: { () -> Void in
+                self._customView?.alpha = 0
+                }, completion: { (Bool) -> Void in
+                    Window.sharedWindow.hidden = true
+                    attachView.removeGestureRecognizer(self._tapGesture!)
+                    self.removeFromSuperview()
+            })
         }
     }
     

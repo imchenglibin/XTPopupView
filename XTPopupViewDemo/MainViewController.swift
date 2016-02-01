@@ -52,10 +52,17 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.row == 0 {
-            let sheet = ActionSheet(title: "选择照片选择照片选择照片选择照片", items: [ActionItem(title: "相机", type: .Normal), ActionItem(title: "相册", type: .HighLight), ActionItem(title: "其他", type: .Disabled)], block: {(Int index)->Void in
+            let sheet = ActionSheet(title: "选择照片", items: [ActionItem(title: "相机", type: .Normal), ActionItem(title: "相册", type: .Normal)], block: {(Int index)->Void in
                 print(index)
             })
             sheet.show()
+        } else if indexPath.row == 1 {
+            let alert = AlertView(title: "这是一个警告框", message: "消息消息消息消息消息消息消息消息消息消息消息消息消息消息消息消息消息消息", items: [ActionItem(title: " 确定", type: .Normal), ActionItem(title: "取消", type: .HighLight)], action: { (Int index) -> Void in
+                print(index)
+            })
+            
+            alert.messageAlignment = NSTextAlignment.Left
+            alert.show()
         }
     }
 }

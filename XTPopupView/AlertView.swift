@@ -2,7 +2,7 @@
 //  AlertView.swift
 //  XTPopupView
 //
-//  Created by admin on 16/2/1.
+//  Created by imchenglibin on 16/2/1.
 //  Copyright © 2016年 xt. All rights reserved.
 //
 
@@ -10,13 +10,11 @@ import UIKit
 import SnapKit
 
 public class AlertView: PopupView {
-    private var _title: String
-    private var _message: String
-    private var _items: [ActionItem]
     private var _textFieldHandler: ((textField: UITextField)->Void)?
     private var _block:(Int)->Void
     private static let DefaultItemHeight: CGFloat = 40
     private var _messageLabel: UILabel?
+    private var _totalHeight: CGFloat = 0
 
     public var inputTextField: UITextField?
     
@@ -29,178 +27,149 @@ public class AlertView: PopupView {
         }
     }
     
-    public init(title: String, message: String, items: [ActionItem], action: (Int)->Void) {
-        _title = title
-        _message = message
-        _items = items
+    public init(title: String, message: String, items: [PopupViewItem], action: (Int)->Void) {
         _block = action
         super.init(frame: CGRectZero)
-        super.setCustomView(createAlertView(), position: .Center)
+        alertView(title, message: message, items: items)
     }
     
-    public init(title: String, placeholder: String, inputTextFieldHandler: (textField: UITextField )->Void, items: [ActionItem], action: (Int)->Void) {
-        _title = title
-        _items = items
-        _block = action
-        _message = placeholder
-        _textFieldHandler = inputTextFieldHandler
-        super.init(frame: CGRectZero)
-        super.setCustomView(createAlertView(), position: .Center)
-    }
-    
-    private func createAlertView() -> UIView {
-        let minSize = min(UIScreen.mainScreen().bounds.size.width, UIScreen.mainScreen().bounds.size.height) - 40
-        let alertView = UIView(frame: CGRectZero)
-        alertView.layer.cornerRadius = 10
-        alertView.clipsToBounds = true
-        alertView.backgroundColor = UIColor.whiteColor()
-        var preItemView: UIView?
-        var height: CGFloat = 0
-        
-        let titleLabel = UILabel()
-        titleLabel.text = _title
+    private func alertView(title: String, message: String, items: [PopupViewItem]) {
+        let alertViewContainer = UIView()
+        alertViewContainer.layer.cornerRadius = 10
+        alertViewContainer.clipsToBounds = true
+        alertViewContainer.backgroundColor = UIColor.groupTableViewBackgroundColor()
+        let titleLabel = UILabel.xt_label(title)
         titleLabel.font = UIFont.boldSystemFontOfSize(16)
-        titleLabel.textAlignment = NSTextAlignment.Center
-        alertView.addSubview(titleLabel)
+        alertViewContainer.addSubview(titleLabel)
         titleLabel.snp_makeConstraints { (make) -> Void in
-            make.top.equalTo(alertView)
-            make.left.equalTo(alertView)
-            make.right.equalTo(alertView)
+            make.left.equalTo(alertViewContainer)
+            make.top.equalTo(alertViewContainer)
+            make.right.equalTo(alertViewContainer)
             make.height.equalTo(AlertView.DefaultItemHeight)
         }
-        height += AlertView.DefaultItemHeight
-        preItemView = titleLabel
+        _totalHeight += AlertView.DefaultItemHeight
+        var preView: UIView = titleLabel
         
-        if let textFieldHandler = _textFieldHandler {
+        if let _ = _textFieldHandler {
+            let textFieldContainer = UIView()
+            textFieldContainer.backgroundColor = UIColor.whiteColor()
             let textField = UITextField()
             inputTextField = textField
             textField.font = UIFont.systemFontOfSize(14)
             textField.borderStyle = UITextBorderStyle.RoundedRect
-            alertView.addSubview(textField)
-            textField.placeholder = _message
-            textFieldHandler(textField: textField)
+            textFieldContainer.addSubview(textField)
+            textField.placeholder = message
+            _textFieldHandler!(textField: textField)
             textField.becomeFirstResponder()
             textField.snp_makeConstraints { (make) -> Void in
-                make.top.equalTo(preItemView!.snp_bottom)
-                make.left.equalTo(alertView).offset(8)
-                make.right.equalTo(alertView).offset(-8)
+                make.top.equalTo(textFieldContainer)
+                make.left.equalTo(textFieldContainer).offset(8)
+                make.right.equalTo(textFieldContainer).offset(-8)
                 make.height.equalTo(AlertView.DefaultItemHeight)
             }
-            preItemView = textField
-            height += AlertView.DefaultItemHeight
+            alertViewContainer.addSubview(textFieldContainer)
+            textFieldContainer.snp_makeConstraints(closure: { (make) -> Void in
+                make.top.equalTo(preView.snp_bottom)
+                make.left.equalTo(alertViewContainer)
+                make.right.equalTo(alertViewContainer)
+                make.height.equalTo(AlertView.DefaultItemHeight + 5)
+            })
+            
+            preView = textFieldContainer
+            _totalHeight += AlertView.DefaultItemHeight + 5
+            
         } else {
-            let messageLabel = UILabel()
-            _messageLabel = messageLabel
-            messageLabel.text = _message
-            messageLabel.textColor = UIColor.darkGrayColor()
+            let messageLabel = UILabel.xt_label(message)
             messageLabel.font = UIFont.systemFontOfSize(12)
-            messageLabel.textAlignment = NSTextAlignment.Center
-            messageLabel.numberOfLines = 0
-            alertView.addSubview(messageLabel)
-            let fitSize = messageLabel.sizeThatFits(CGSize(width: minSize - 16, height: 0))
-            
+            alertViewContainer.addSubview(messageLabel)
             messageLabel.snp_makeConstraints { (make) -> Void in
-                make.top.equalTo(preItemView!.snp_bottom)
-                make.left.equalTo(alertView).offset(8)
-                make.right.equalTo(alertView).offset(-8)
-                make.height.equalTo(fitSize.height)
+                make.left.equalTo(alertViewContainer)
+                make.top.equalTo(preView.snp_bottom)
+                make.right.equalTo(alertViewContainer)
+                make.height.equalTo(AlertView.DefaultItemHeight)
             }
-            
-            preItemView = messageLabel
-            height += fitSize.height
+            preView = messageLabel
+            _totalHeight += AlertView.DefaultItemHeight
         }
         
-        let underline = UIView()
-        underline.backgroundColor = UIColor.groupTableViewBackgroundColor()
-        alertView.addSubview(underline)
-        underline.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(alertView)
-            make.right.equalTo(alertView)
-            make.top.equalTo(preItemView!.snp_bottom).offset(4)
-            make.height.equalTo(1)
-        }
-        
-        preItemView = underline
-        height += 5
-        
-        if _items.count == 2 {
-            let itemView0 = ActionItemView(title: _items[0].title, underlineHeight: 0, type: _items[0].type)
-            let itemView1 = ActionItemView(title: _items[1].title, underlineHeight: 0, type: _items[1].type)
-            itemView0.addTarget(self, action: Selector("itemAction:"), forControlEvents: UIControlEvents.TouchUpInside, tag: 0)
-            itemView1.addTarget(self, action: Selector("itemAction:"), forControlEvents: UIControlEvents.TouchUpInside, tag: 1)
-            alertView.addSubview(itemView0)
-            alertView.addSubview(itemView1)
+        if items.count == 2 {
+            let btn0 = UIButton.xt_button(items[0].title, type: items[0].type)
+            let btn1 = UIButton.xt_button(items[1].title, type: items[1].type)
+            alertViewContainer.addSubview(btn0)
+            alertViewContainer.addSubview(btn1)
             
-            let separateLine = UIView()
-            separateLine.backgroundColor = UIColor.groupTableViewBackgroundColor()
-            alertView.addSubview(separateLine)
-            
-            itemView0.snp_makeConstraints(closure: { (make) -> Void in
-                make.left.equalTo(alertView)
-                make.right.equalTo(separateLine.snp_left)
-                make.width.equalTo(itemView1)
-                make.bottom.equalTo(alertView)
+            btn0.tag = 0
+            if items[0].type != .Disabled {
+                btn0.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
+            }
+            btn1.tag = 1
+            if items[1].type != .Disabled {
+                btn1.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
+            }
+            btn0.snp_makeConstraints(closure: { (make) -> Void in
+                make.left.equalTo(alertViewContainer)
+                make.right.equalTo(btn1.snp_left).offset(-1)
+                make.top.equalTo(preView.snp_bottom).offset(1)
+                make.height.equalTo(AlertView.DefaultItemHeight)
+                make.width.equalTo(btn1)
+            })
+            btn1.snp_makeConstraints(closure: { (make) -> Void in
+                make.right.equalTo(alertViewContainer)
+                make.top.equalTo(preView.snp_bottom).offset(1)
                 make.height.equalTo(AlertView.DefaultItemHeight)
             })
-            
-            separateLine.snp_makeConstraints(closure: { (make) -> Void in
-                make.centerY.equalTo(itemView0.snp_centerY)
-                make.bottom.equalTo(alertView)
-                make.top.equalTo(itemView0.snp_top)
-                make.width.equalTo(1)
-            })
-            
-            itemView1.snp_makeConstraints(closure: { (make) -> Void in
-                make.left.equalTo(separateLine.snp_right)
-                make.right.equalTo(alertView)
-                make.bottom.equalTo(alertView)
-                make.height.equalTo(AlertView.DefaultItemHeight)
-            })
-            
-            height += AlertView.DefaultItemHeight
+            _totalHeight += AlertView.DefaultItemHeight
         } else {
-            var underlineHeight: CGFloat = 1.0
-            for var i=0; i<_items.count; i++ {
-                let item = _items[i]
-                if i == _items.count - 1 {
-                    underlineHeight = 0
+            for var i=0; i<items.count; i++ {
+                let item = items[i]
+                let btn = UIButton.xt_button(item.title, type: item.type)
+                btn.tag = i
+                if item.type != .Disabled {
+                    btn.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
                 }
-                let itemView = ActionItemView(title: item.title, underlineHeight: underlineHeight, type: item.type)
-                itemView.addTarget(self, action: Selector("itemAction:"), forControlEvents: UIControlEvents.TouchUpInside, tag: i)
-                alertView.addSubview(itemView)
-                
-                if let preView = preItemView {
-                    itemView.snp_makeConstraints(closure: { (make) -> Void in
-                        make.left.equalTo(alertView)
-                        make.right.equalTo(alertView)
-                        make.top.equalTo(preView.snp_bottom)
-                        make.height.equalTo(AlertView.DefaultItemHeight + underlineHeight)
-                    })
-                } else {
-                    itemView.snp_makeConstraints(closure: { (make) -> Void in
-                        make.left.equalTo(alertView)
-                        make.right.equalTo(alertView)
-                        make.top.equalTo(alertView)
-                        make.height.equalTo(AlertView.DefaultItemHeight + underlineHeight)
-                    })
-                }
-                preItemView = itemView
-                height += AlertView.DefaultItemHeight + underlineHeight
+                alertViewContainer.addSubview(btn)
+                btn.snp_makeConstraints(closure: { (make) -> Void in
+                    make.left.equalTo(alertViewContainer)
+                    make.right.equalTo(alertViewContainer)
+                    make.top.equalTo(preView.snp_bottom).offset(1)
+                    make.height.equalTo(AlertView.DefaultItemHeight)
+                })
+                _totalHeight += AlertView.DefaultItemHeight
+                preView = btn
             }
         }
+        let minSize = min(UIScreen.mainScreen().bounds.size.width, UIScreen.mainScreen().bounds.size.height)
+        addSubview(alertViewContainer)
         
-        alertView.frame = CGRect(x: 0, y: 0, width: minSize, height: height)
-        
-        return alertView
+        if let _ = _textFieldHandler {
+            alertViewContainer.snp_makeConstraints { (make) -> Void in
+                make.center.equalTo(self).offset(CGPoint(x: 0, y: -216 / 2))
+                make.width.equalTo(minSize - 40)
+                make.height.equalTo(_totalHeight)
+            }
+        } else {
+            alertViewContainer.snp_makeConstraints { (make) -> Void in
+                make.center.equalTo(self)
+                make.width.equalTo(minSize - 40)
+                make.height.equalTo(_totalHeight)
+            }
+        }
+    }
+    
+    func buttonAction(sender: UIButton) {
+        _block(sender.tag)
+        self.hide()
+    }
+    
+    public init(title: String, placeholder: String, inputTextFieldHandler: (textField: UITextField )->Void, items: [PopupViewItem], action: (Int)->Void) {
+        _block = action
+        _textFieldHandler = inputTextFieldHandler
+        super.init(frame: CGRectZero)
+        alertView(title, message: placeholder, items: items)
     }
     
     func itemAction(sender: UIButton) {
-        if _items[sender.tag].type == ActionItemType.Disabled {
-            return
-        }
-        if sender.tag < _items.count {
-            _block(sender.tag)
-        }
+        _block(sender.tag)
         
         inputTextField?.resignFirstResponder()
         
@@ -209,12 +178,6 @@ public class AlertView: PopupView {
     
     public override func show() {
         super.show()
-        if let _ = inputTextField {
-            self.customView?.snp_updateConstraints(closure: { (make) -> Void in
-                let newPoint = CGPoint(x: self.center.x, y: self.center.y - 216 / 2)
-                make.center.equalTo(self).offset(newPoint)
-            })
-        }
     }
 
     required public init?(coder aDecoder: NSCoder) {

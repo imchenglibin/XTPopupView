@@ -39,6 +39,7 @@ public class AlertView: PopupView {
         alertViewContainer.clipsToBounds = true
         alertViewContainer.backgroundColor = UIColor.groupTableViewBackgroundColor()
         let titleLabel = UILabel.xt_label(title)
+        titleLabel.textColor = UIColor.blackColor()
         titleLabel.font = UIFont.boldSystemFontOfSize(16)
         alertViewContainer.addSubview(titleLabel)
         titleLabel.snp_makeConstraints { (make) -> Void in
